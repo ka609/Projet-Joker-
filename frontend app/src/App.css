@@ -1,0 +1,86 @@
+
+.navbar-brand img {
+  margin-right: 10px;
+}
+
+.h1{
+  color: aliceblue;
+}
+.nav-link {
+  color: #f0ad4e !important; /* Couleur dorée */
+  position: relative;
+}
+
+.alert-warning {
+  background-color: #333333;
+  border-color: #f0ad4e;
+  color: #f0ad4e;
+}
+
+.btn-primary {
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+
+.btn-primary:hover {
+  background-color: #d89132;
+  border-color: #d89132;
+}
+
+.carte {
+  width: 5cm; /* Largeur de la carte */
+  height: 20cm; /* Longueur de la carte */
+  border: 1px solid #000; /* Bordure de la carte */
+  padding: 10px; /* Espacement interne */
+  box-sizing: border-box; /* Inclure la bordure et le padding dans la taille totale */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centrer le contenu horizontalement */
+  justify-content: space-around; /* Espacer le contenu verticalement */
+}
+
+#qrCode {
+  max-width: 4cm; /* Largeur maximale pour le QR code */
+  height: auto; /* Garder les proportions */
+}
+
+
+.background-image {
+  background-image: url('C:/Users/Kassongo Moussa/my-frontend-app/public/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-header {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  padding-top: 20px; /* Ajuste la position de l'en-tête par rapport au haut */
+}
+
+.content-container {
+  flex: 1;
+  padding: 20px;
+}
+
+.top-bottom-element{
+  position: absolute;
+  top: 50%;
+  left:50% ;
+  transform: translate(-50%,-50%);
+
+
+}
+.header{
+  background-color: azure;
+  text-align: center;
+  text-decoration-color: #000;
+}
+
+
+
