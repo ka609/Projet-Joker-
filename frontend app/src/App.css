@@ -11,27 +11,11 @@
 html, body {
   height: 100%; /* Assure que le body occupe toute la hauteur de la page */
   margin: 0; /* Supprime les marges par défaut */
-  display: flex;
-  flex-direction: column;
+  padding: 0;
+  width: 100%;
 }
 
 
-/* En-tête de la page */
-.header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-/* Style général pour le contenu principal */
-.main-content {
-  display: flex;
-}
-
-/* Barre latérale */
-.sidebar {
-  width: 20%;
-  padding-right: 20px;
-}
 
 
 /* Message de confirmation centré */
@@ -39,40 +23,44 @@ html, body {
   margin-bottom: 20px;
 }
 
-/* Formulaire pour générer une facture */
-form {
-  width: 100%;
-  max-width: 600px; /* Taille réduite du formulaire de facture */
-  margin: 0 auto;
-}
-
-/* Style pour les boutons */
-button {
-  margin-top: 20px;
-  width: 100%;
-}
-
-/* Pied de page */
 footer {
   text-align: center;
-  margin-top: 20px;
   padding-top: 20px;
   border-top: 1px solid #ddd;
-  background-color: #003366; /* Couleur du pied de page */
-  color: #ffffff; /* Couleur du texte dans le pied de page */
-  padding: 10px 0;
-  bottom: 0;
-   /* Ajout d'un léger arrondi */
+  background-color: #003366;
+  color: #ffffff;
+  padding: 10px;
+  border: solid;
+  width: 100%;
 }
 
-/* Réduction de la taille des factures */
+form {
+  width: 100%;
+  max-width: 500px; /* Taille plus petite du formulaire */
+  margin: 0 auto;
+  margin-top: 200px; /* Ajoute un espace au-dessus du formulaire */
+}
+
+
 .invoice-item {
   padding: 10px;
   border: 1px solid #ccc;
   margin-bottom: 15px;
   border-radius: 5px;
   background-color: #f9f9f9;
+  width: 100%; /* Prend toute la largeur disponible dans .content */
+  margin: 0 auto; /* Centrage horizontal, utile si max-width est réduit */
 }
+
+
+/* Ajuster les boutons */
+button {
+  margin-top: 20px;
+  width: auto;
+  padding: 10px 20px; /* Taille réduite des boutons */
+  font-size: 14px;
+}
+
 
 /* Responsiveness - Responsive */
 @media (max-width: 768px) {
@@ -92,23 +80,39 @@ footer {
 /* En-tête de la page */
 .header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   background-color: #003366; /* Couleur de l'en-tête */
   color: #ffffff; /* Couleur du texte de l'en-tête */
-  padding: 20px 0;
+  padding: 10px 0;
   border-radius: 8px; /* Ajout d'un léger arrondi pour l'en-tête */
 }
-/* Section de contenu */
-.content {
+.main-content {
+  flex-grow: 1;
+  display: flex;
   width: 100%;
-  background-color: #ffffff; /* Fond blanc pour le contenu principal */
-  padding: 20px;
-  border-radius: 8px; /* Ajout d'un léger arrondi */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Légère ombre pour le contenu */
 }
+
+.sidebar {
+  flex-shrink: 0;
+  width: 20%;
+  padding-right: 30px;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: wheat;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  min-height: 400px; /* Définit une hauteur minimale de 400px */
+}
+
 .container {
-  width: 100%;
-  max-width: none; /* Supprime la limite de largeur */
+  width: 100dvw; /* Prend toute la largeur de l'écran */
+  height: 100vh ; /* Prend toute la hauteur de l'écran */
   margin: 0 auto;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Espace entre les sections */
 }

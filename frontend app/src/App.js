@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import {  Row, Col, Alert, Nav, Form, Button } from 'react-bootstrap';
+import { Row, Col, Alert, Nav, Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -84,7 +84,7 @@ function App() {
             <div className="container">
                 <header>
                     <div className="header">
-                        <h1>Générateur de Factures Foudre</h1>
+                        <h1>Paiement Rapide en Bitcoin</h1>
                     </div>
                 </header>
                 <div className="main-content">
@@ -148,7 +148,7 @@ function App() {
                     </section>
                 </div>
                 <footer>
-                    <p>&copy; 2024 Générateur de Factures Foudre</p>
+                    <p>&copy; 2024 Paiement Rapide en Bitcoin</p>
                 </footer>
             </div>
         </Router>
