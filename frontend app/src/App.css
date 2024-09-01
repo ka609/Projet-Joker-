@@ -1,86 +1,114 @@
+/* App.css */
 
-.navbar-brand img {
-  margin-right: 10px;
+/* Réinitialisation des marges et paddings */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.h1{
-  color: aliceblue;
-}
-.nav-link {
-  color: #f0ad4e !important; /* Couleur dorée */
-  position: relative;
-}
-
-.alert-warning {
-  background-color: #333333;
-  border-color: #f0ad4e;
-  color: #f0ad4e;
-}
-
-.btn-primary {
-  background-color: #f0ad4e;
-  border-color: #f0ad4e;
-}
-
-.btn-primary:hover {
-  background-color: #d89132;
-  border-color: #d89132;
-}
-
-.carte {
-  width: 5cm; /* Largeur de la carte */
-  height: 20cm; /* Longueur de la carte */
-  border: 1px solid #000; /* Bordure de la carte */
-  padding: 10px; /* Espacement interne */
-  box-sizing: border-box; /* Inclure la bordure et le padding dans la taille totale */
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centrer le contenu horizontalement */
-  justify-content: space-around; /* Espacer le contenu verticalement */
-}
-
-#qrCode {
-  max-width: 4cm; /* Largeur maximale pour le QR code */
-  height: auto; /* Garder les proportions */
-}
-
-
-.background-image {
-  background-image: url('C:/Users/Kassongo Moussa/my-frontend-app/public/bg.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  min-height: 100vh;
+/* Taille de la page */
+html, body {
+  height: 100%; /* Assure que le body occupe toute la hauteur de la page */
+  margin: 0; /* Supprime les marges par défaut */
   display: flex;
   flex-direction: column;
 }
 
-.top-header {
-  position: relative;
+
+/* En-tête de la page */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Style général pour le contenu principal */
+.main-content {
+  display: flex;
+}
+
+/* Barre latérale */
+.sidebar {
+  width: 20%;
+  padding-right: 20px;
+}
+
+
+/* Message de confirmation centré */
+#confirmation-message {
+  margin-bottom: 20px;
+}
+
+/* Formulaire pour générer une facture */
+form {
   width: 100%;
-  text-align: center;
-  padding-top: 20px; /* Ajuste la position de l'en-tête par rapport au haut */
+  max-width: 600px; /* Taille réduite du formulaire de facture */
+  margin: 0 auto;
 }
 
-.content-container {
-  flex: 1;
+/* Style pour les boutons */
+button {
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* Pied de page */
+footer {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+  background-color: #003366; /* Couleur du pied de page */
+  color: #ffffff; /* Couleur du texte dans le pied de page */
+  padding: 10px 0;
+  bottom: 0;
+   /* Ajout d'un léger arrondi */
+}
+
+/* Réduction de la taille des factures */
+.invoice-item {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+/* Responsiveness - Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+      width: 100%;
+      padding-right: 0;
+  }
+
+  .content {
+      width: 100%;
+  }
+
+  form {
+      width: 100%;
+  }
+}
+/* En-tête de la page */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  background-color: #003366; /* Couleur de l'en-tête */
+  color: #ffffff; /* Couleur du texte de l'en-tête */
+  padding: 20px 0;
+  border-radius: 8px; /* Ajout d'un léger arrondi pour l'en-tête */
+}
+/* Section de contenu */
+.content {
+  width: 100%;
+  background-color: #ffffff; /* Fond blanc pour le contenu principal */
   padding: 20px;
+  border-radius: 8px; /* Ajout d'un léger arrondi */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Légère ombre pour le contenu */
 }
-
-.top-bottom-element{
-  position: absolute;
-  top: 50%;
-  left:50% ;
-  transform: translate(-50%,-50%);
-
-
+.container {
+  width: 100%;
+  max-width: none; /* Supprime la limite de largeur */
+  margin: 0 auto;
+  padding: 0;
 }
-.header{
-  background-color: azure;
-  text-align: center;
-  text-decoration-color: #000;
-}
-
-
-

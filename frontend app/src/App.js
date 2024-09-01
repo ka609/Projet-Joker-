@@ -1,144 +1,158 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { Container, Row, Col, Alert, Nav } from 'react-bootstrap';
+import {  Row, Col, Alert, Nav, Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'; // Assurez-vous que le fichier CSS est bien configuré
+import './App.css';
 
-// Importer les composants des sous-pages
-import HomePage from './pages/HomePage';
+// Importer uniquement les composants et fonctions nécessaires
 import InvoicesPage from './pages/InvoicesPage';
+import { fetchInvoices, generateInvoice, checkPayment, payInvoice, deleteInvoice } from './api';
 
 function App() {
-  const [amount, setAmount] = useState('');
-  const [invoices, setInvoices] = useState([]);
-  const [confirmationMessage, setConfirmationMessage] = useState('');
+    const [amount, setAmount] = useState('');
+    const [description, setDescription] = useState('');
+    const [invoices, setInvoices] = useState([]);
+    const [confirmationMessage, setConfirmationMessage] = useState('');
 
-  const fetchInvoices = useCallback(async () => {
-    try {
-      const response = await axios.get('/invoices'); // Assurez-vous que cette URL est correcte
-      setInvoices(response.data.invoices);
-    } catch (error) {
-      console.error('Erreur lors du chargement des factures:', error);
-      setConfirmationMessage('Erreur lors du chargement des factures');
-    }
-  }, []);
+    const loadInvoices = useCallback(async () => {
+        try {
+            const invoicesData = await fetchInvoices();
+            setInvoices(invoicesData);
+        } catch (error) {
+            setConfirmationMessage(error.message);
+        }
+    }, []);
 
-  useEffect(() => {
-    fetchInvoices(); // Charger les factures au démarrage
-  }, [fetchInvoices]);
+    useEffect(() => {
+        loadInvoices();
+    }, [loadInvoices]);
 
-  const handleGenerateInvoice = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('/generate-invoice', { amount });
-      setConfirmationMessage('Facture générée avec succès !');
+    const handleGenerateInvoice = async (e) => {
+        e.preventDefault();
+        try {
+            const newInvoice = await generateInvoice(amount);
+            setConfirmationMessage('Facture générée avec succès !');
+            setInvoices(prevInvoices => [...prevInvoices, newInvoice]);
+            setAmount('');
+            setDescription('');
+        } catch (error) {
+            setConfirmationMessage(error.message);
+        }
+    };
 
-      // Ajouter la nouvelle facture à la liste
-      setInvoices(prevInvoices => [...prevInvoices, response.data]);
-      setAmount(''); // Réinitialiser le montant
-    } catch (error) {
-      console.error('Erreur lors de la génération de la facture:', error);
-      setConfirmationMessage('Erreur lors de la génération de la facture');
-    }
-  };
+    const handleCheckPayment = async (paymentRequest) => {
+        if (!paymentRequest) {
+            setConfirmationMessage('Aucune facture à vérifier.');
+            return;
+        }
 
-  const handleCheckPayment = async (paymentRequest) => {
-    if (!paymentRequest) {
-      setConfirmationMessage('Aucune facture à vérifier.');
-      return;
-    }
+        try {
+            const paymentDetails = await checkPayment(paymentRequest);
+            setConfirmationMessage(`Détails du paiement : ${JSON.stringify(paymentDetails)}`);
+        } catch (error) {
+            setConfirmationMessage(error.message);
+        }
+    };
 
-    try {
-      const response = await axios.post('/check-payment', { paymentRequest });
-      setConfirmationMessage(`Détails du paiement : ${JSON.stringify(response.data)}`);
-    } catch (error) {
-      console.error('Erreur lors de la vérification du paiement:', error);
-      setConfirmationMessage('Erreur lors de la vérification du paiement');
-    }
-  };
+    const handlePayInvoice = async (paymentRequest) => {
+        try {
+            const paymentResult = await payInvoice(paymentRequest);
+            setConfirmationMessage(`Paiement effectué : ${JSON.stringify(paymentResult)}`);
+        } catch (error) {
+            setConfirmationMessage(error.message);
+        }
+    };
 
-  const handlePayInvoice = async (paymentRequest) => {
-    try {
-      const response = await axios.post('/pay-invoice', { paymentRequest });
-      setConfirmationMessage(`Paiement effectué : ${JSON.stringify(response.data)}`);
-    } catch (error) {
-      console.error('Erreur lors du paiement de la facture:', error);
-      setConfirmationMessage('Erreur lors du paiement de la facture');
-    }
-  };
+    const handleDeleteInvoice = async (paymentRequest) => {
+        try {
+            await deleteInvoice(paymentRequest);
+            setInvoices(prevInvoices => prevInvoices.filter(inv => inv.paymentRequest !== paymentRequest));
+            setConfirmationMessage('Facture supprimée avec succès');
+        } catch (error) {
+            setConfirmationMessage(error.message);
+        }
+    };
 
-  const copyToClipboard = (paymentRequest) => {
-    navigator.clipboard.writeText(paymentRequest).then(() => {
-      alert('Facture copiée dans le presse-papiers');
-    }).catch(err => {
-      console.error('Erreur lors de la copie dans le presse-papiers:', err);
-    });
-  };
+    const copyToClipboard = (paymentRequest) => {
+        navigator.clipboard.writeText(paymentRequest)
+            .then(() => alert('Facture copiée dans le presse-papiers'))
+            .catch(err => console.error('Erreur lors de la copie dans le presse-papiers:', err));
+    };
 
-  const deleteInvoice = async (paymentRequest) => {
-    try {
-      await axios.delete('/delete-invoice', { data: { paymentRequest } });
-      setInvoices(prevInvoices => prevInvoices.filter(inv => inv.paymentRequest !== paymentRequest));
-      setConfirmationMessage('Facture supprimée avec succès');
-    } catch (error) {
-      console.error('Erreur lors de la suppression de la facture:', error);
-      setConfirmationMessage('Erreur lors de la suppression de la facture');
-    }
-  };
+    return (
+        <Router>
+            <div className="container">
+                <header>
+                    <div className="header">
+                        <h1>Générateur de Factures Foudre</h1>
+                    </div>
+                </header>
+                <div className="main-content">
+                    <aside className="sidebar">
+                        <Nav className="flex-column">
+                            <Nav.Link as={Link} to="/">Accueil</Nav.Link>
+                            <Nav.Link as={Link} to="/invoices">Factures</Nav.Link>
+                        </Nav>
+                    </aside>
+                    <section className="content">
+                        {confirmationMessage && (
+                            <section id="confirmation-message" className="mb-4">
+                                <Row>
+                                    <Col md={8} className="mx-auto">
+                                        <Alert variant="info">
+                                            {confirmationMessage}
+                                        </Alert>
+                                    </Col>
+                                </Row>
+                            </section>
+                        )}
 
-  return (
-    <Router>
-      <Container fluid className="background-image">
-      <header>
-        <div className="header">
-          <h1>Générateur de Factures Foudre</h1>
-          </div>
-        </header>
-        <Row>
-    <Col xs={3}>
-      <Nav className="flex-column">
-        <Nav.Link as={Link} to="/">Accueil</Nav.Link>
-        <Nav.Link as={Link} to="/invoices">Factures</Nav.Link>
-      </Nav>
-    </Col>
-    <Col xs={9}>
-
-        {confirmationMessage && (
-          <section id="confirmation-message" className="mb-4">
-            <Row>
-              <Col md={8} className="mx-auto">
-                <Alert variant="info">
-                  {confirmationMessage}
-                </Alert>
-              </Col>
-            </Row>
-          </section>
-        )}
-
-        <Routes>
-          <Route path="/" element={
-            <HomePage
-              amount={amount}
-              setAmount={setAmount}
-              handleGenerateInvoice={handleGenerateInvoice}
-            />
-          } />
-          <Route path="/invoices" element={
-            <InvoicesPage
-              invoices={invoices}
-              copyToClipboard={copyToClipboard}
-              deleteInvoice={deleteInvoice}
-              handlePayInvoice={handlePayInvoice}
-              handleCheckPayment={handleCheckPayment}
-            />
-          } />
-        </Routes>
-        </Col>
-       </Row>
-      </Container>
-    </Router>
-  );
+                        <Routes>
+                            <Route path="/" element={
+                                <div>
+                                    <Form onSubmit={handleGenerateInvoice}>
+                                        <Form.Group controlId="amount">
+                                            <Form.Label>Montant (en satoshis)</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                value={amount}
+                                                onChange={(e) => setAmount(e.target.value)}
+                                                placeholder="Entrez le montant"
+                                            />
+                                        </Form.Group>
+                                        <Form.Group controlId="description">
+                                            <Form.Label>Description</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                value={description}
+                                                onChange={(e) => setDescription(e.target.value)}
+                                                placeholder="Entrez la description"
+                                            />
+                                        </Form.Group>
+                                        <Button variant="primary" type="submit">
+                                            Générer la Facture
+                                        </Button>
+                                    </Form>
+                                </div>
+                            } />
+                            <Route path="/invoices" element={
+                                <InvoicesPage
+                                    invoices={invoices}
+                                    copyToClipboard={copyToClipboard}
+                                    deleteInvoice={handleDeleteInvoice}
+                                    handlePayInvoice={handlePayInvoice}
+                                    handleCheckPayment={handleCheckPayment}
+                                />
+                            } />
+                        </Routes>
+                    </section>
+                </div>
+                <footer>
+                    <p>&copy; 2024 Générateur de Factures Foudre</p>
+                </footer>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
