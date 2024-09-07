@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ alter: true }).then(() => {
     console.log("Base de données synchronisée");
 });
 
@@ -35,9 +35,10 @@ async function generateQRCode(text) {
 }
 
 app.post('/generate-invoice', async (req, res) => {
-    const { amount } = req.body;
+    const { amount,memo } = req.body;
 
     try {
+        // Création de la facture avec l'API LND
         const response = await lndApi.post('/invoices', {
             value: amount.toString(),
             memo: "Facture générée",
@@ -48,23 +49,41 @@ app.post('/generate-invoice', async (req, res) => {
         const createdAt = response.data.creation_date;
         const updatedAt = response.data.settle_date || createdAt;
 
+        // Générer le QR code
         const qrCode = await generateQRCode(paymentRequest);
 
-        const invoice = {
-            id: response.data.r_hash,
-            amount,
-            paymentRequest,
-            createdAt: new Date(createdAt * 1000),
-            updatedAt: new Date(updatedAt * 1000),
-            qrCode
-        };
+        // Vérification si la `paymentRequest` est bien présente
+        if (!paymentRequest) {
+            throw new Error("Erreur: paymentRequest est null");
+        }
 
-        res.status(200).json(invoice);
+        // Création de la facture dans la base de données
+        const invoice = await Invoice.create({
+            amount: amount,                  // Utilisez directement `amount` du body
+            paymentRequest: paymentRequest,  // Utilisez la variable `paymentRequest` ici
+            date: new Date(),                // Date actuelle
+            paid: false                      // Par défaut à `false`
+        });
+        console.log("Invoice created:", invoice);
+
+        // Retour de la facture créée avec le QR code
+        res.status(200).json({
+            id: invoice.id,
+            amount: invoice.amount,
+            paymentRequest: invoice.paymentRequest,
+            date: invoice.createdAt, // Utilisez createdAt ou date selon votre structure
+            paid: invoice.paid,
+            qrCode
+        });
     } catch (error) {
+        // Gérer les erreurs et envoyer une réponse appropriée
         console.error('Erreur lors de la génération de la facture:', error);
         res.status(500).json({ message: 'Erreur lors de la génération de la facture' });
     }
 });
+
+
+
 
 app.post('/pay-invoice', async (req, res) => {
     const { paymentRequest } = req.body;
@@ -121,5 +140,5 @@ app.delete('/delete-invoice', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; 
 app.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`));

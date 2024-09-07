@@ -5,16 +5,22 @@ const sequelize = require('../database');
 const Invoice = sequelize.define('Invoice', {
     amount: {
         type: DataTypes.FLOAT,
-        allowNull: false,
+        allowNull: false
     },
     paymentRequest: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
+    },
+    date: {
+        type: DataTypes.DATE,
+        allowNull: false
     },
     paid: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
-    },
+        defaultValue: false
+    }
+}, {
+    timestamps: true
 });
 
 module.exports = Invoice;
