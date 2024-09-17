@@ -1,0 +1,25 @@
+/* src/pages/AuthHomePage.css */
+.auth-home {
+    text-align: center;
+    padding: 50px;
+  }
+  
+  .auth-buttons {
+    margin-top: 20px;
+  }
+  
+  .auth-link {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .auth-link:hover {
+    background-color: #0056b3;
+  }
+  

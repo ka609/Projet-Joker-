@@ -13,6 +13,8 @@ const Home = () => {
                     <li><Link to="/generate-invoice">Générer une Facture</Link></li>
                     <li><Link to="/verify-payment">Vérifier un Paiement</Link></li>
                     <li><Link to="/invoices">Voir les Factures</Link></li>
+                    <li><Link to="/help">Aide</Link></li>
+                    <li><Link to="/settings">Paramétres</Link></li>
                 </ul>
             </nav>
         </div>

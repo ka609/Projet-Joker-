@@ -53,3 +53,13 @@ export const deleteInvoice = async (paymentRequest) => {
         throw new Error('Erreur lors de la suppression de la facture');
     }
 };
+// Fonction pour gérer l'authentification
+export const auth = async (credentials) => {
+    try {
+        const response = await axios.post('/login', credentials);
+        return response.data;  // Retourne les données de l'utilisateur authentifié
+    } catch (error) {
+        console.error('Erreur lors de l\'authentification:', error);
+        throw new Error('Erreur lors de l\'authentification');
+    }
+};
