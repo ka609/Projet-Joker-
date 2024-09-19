@@ -4,12 +4,14 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const qrcode = require('qrcode');
+require('dotenv').config();
 
 // Firebase Admin SDK
 const admin = require('firebase-admin');
 
 // Charger la clé privée Firebase pour le compte de service
-const serviceAccount = require('./datafire-d4025-firebase-adminsdk-jru6x-b2278502bb.json');
+const serviceAccount = require(process.env.FIREBASE_SERVICE_ACCOUNT_PATH);
+
 
 // Initialiser Firebase Admin SDK
 admin.initializeApp({
