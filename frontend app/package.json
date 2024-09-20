@@ -9,11 +9,8 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.5",
     "bootstrap": "^5.3.3",
-<<<<<<< HEAD
     "firebase": "^10.13.2",
-=======
-    "firebase": "^10.13.1",
->>>>>>> 10e4d40d3cd14427358986fe1ce91987ce509a84
+  
     "qrcode.react": "^4.0.1",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
